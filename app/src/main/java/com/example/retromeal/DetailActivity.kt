@@ -5,7 +5,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.retromeal.R
 import com.squareup.picasso.Picasso
-
+/*La clase DetailActivity en tu código es una actividad en Android, que forma parte
+de la interfaz de usuario de tu aplicación. En el contexto de una aplicación que muestra
+ información sobre comidas, esta actividad se utiliza para mostrar los detalles
+de una comida seleccionada. Aquí te explico cada parte de su funcionalidad:*/
 class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

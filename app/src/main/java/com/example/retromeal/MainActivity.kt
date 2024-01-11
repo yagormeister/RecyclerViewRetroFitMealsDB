@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 mealAdapter = MealAdapter(meals, this@MainActivity)
                 recyclerView.adapter = mealAdapter
+
+                // Envía un broadcast una vez que los datos están cargados
+                sendBroadcast(Intent("com.example.retromeal.DATA_LOADED"))
             }
         }
     }

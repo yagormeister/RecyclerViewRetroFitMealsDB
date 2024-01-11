@@ -10,22 +10,29 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RetroMeal">
+        android:theme="@style/Theme.RetroMeal"
+        tools:targetApi="s">
 
-        <activity
-            android:name="com.example.retromeal.MainActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme">
+        <activity android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <!-- MainActivity -->
+        <activity android:name="com.example.retromeal.MainActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme"/>
+
+        <!-- DetailActivity -->
         <activity android:name="com.example.retromeal.DetailActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"
+            android:exported="true"/>
 
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"
+        tools:ignore="ManifestOrder" />
 </manifest>

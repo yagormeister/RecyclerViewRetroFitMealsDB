@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.retromeal.MainActivity
 import com.example.retromeal.R
 import com.squareup.picasso.Picasso
-
+/*La clase MealAdapter en el contexto de tu aplicación es un adaptador personalizado para un
+RecyclerView. Esta clase es una parte crucial para mostrar una lista de
+ elementos en una interfaz de usuario en aplicaciones Android*/
 class MealAdapter(private val meals: List<Meal>, private val listener: MainActivity) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {

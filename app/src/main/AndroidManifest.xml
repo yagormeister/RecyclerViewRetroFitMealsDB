@@ -13,7 +13,7 @@
         android:theme="@style/Theme.RetroMeal"
         tools:targetApi="s">
 
-        <activity android:name=".SplashActivity"
+        <activity android:name="com.example.retromeal.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

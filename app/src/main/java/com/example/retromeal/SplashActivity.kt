@@ -11,38 +11,50 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.retromeal.MainActivity
 import com.example.retromeal.R
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var receiver: BroadcastReceiver
+    private var isDataLoaded = false
+    private var isDelayElapsed = false
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
 
-        // Define el BroadcastReceiver
+        // Define y registra el BroadcastReceiver
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                // Handler para introducir un retraso
-                Handler(Looper.getMainLooper()).postDelayed({
-                    // Cierra SplashActivity después del retraso
+                isDataLoaded = true
+                if (isDelayElapsed) {
+                    // Cierra SplashActivity
                     finish()
-                }, 2000) // Retraso de 2000 milisegundos (2 segundos)
+                }
             }
         }
 
+        // Registra el BroadcastReceiver con la seguridad requerida
+        val intentFilter = IntentFilter("com.example.retromeal.DATA_LOADED")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(receiver, intentFilter)
+        }
 
-        // Registra el BroadcastReceiver
-        registerReceiver(receiver, IntentFilter("com.example.retromeal.DATA_LOADED"),
-            RECEIVER_NOT_EXPORTED
-        )
-
-        // Inicia MainActivity
-        startActivity(Intent(this, MainActivity::class.java))
+        // Inicia un retraso mínimo antes de iniciar MainActivity
+        Handler(Looper.getMainLooper()).postDelayed({
+            isDelayElapsed = true
+            if (isDataLoaded) {
+                // Cierra SplashActivity
+                finish()
+            } else {
+                // Inicia MainActivity después del retraso
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+        }, 2000) // 2000 milisegundos de retraso (2 segundos)
     }
 
     override fun onDestroy() {

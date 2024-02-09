@@ -1,16 +1,25 @@
+package com.example.retromeal
+
+import MealRepository
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.retromeal.MainActivity
-import com.example.retromeal.R
 import com.squareup.picasso.Picasso
-/*La clase MealAdapter en el contexto de tu aplicación es un adaptador personalizado para un
-RecyclerView. Esta clase es una parte crucial para mostrar una lista de
- elementos en una interfaz de usuario en aplicaciones Android*/
-class MealAdapter(private val meals: List<Meal>, private val listener: MainActivity) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class MealAdapter(private val context: Context, private val favoriteMeals: MutableList<FavoriteMeal>, private val listener: Listener) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
+
+    private val mealRepository = MealRepository(context)
+
+    interface Listener {
+        fun onMealClick(favoriteMeal: FavoriteMeal)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_meal, parent, false)
@@ -18,31 +27,53 @@ class MealAdapter(private val meals: List<Meal>, private val listener: MainActiv
     }
 
     override fun onBindViewHolder(holder: MealViewHolder, position: Int) {
-        val meal = meals[position]
-        holder.bind(meal)
+        val favoriteMeal = favoriteMeals[position]
+        holder.bind(favoriteMeal)
     }
 
-    override fun getItemCount(): Int = meals.size
+    override fun getItemCount(): Int = favoriteMeals.size
 
+    fun updateMeals(newFavoriteMeals: List<FavoriteMeal>) {
+        this.favoriteMeals.clear()
+        this.favoriteMeals.addAll(newFavoriteMeals)
+        notifyDataSetChanged()
+    }
 
     inner class MealViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageViewMeal: ImageView = itemView.findViewById(R.id.imageViewMeal)
         private val textViewMealName: TextView = itemView.findViewById(R.id.textViewMealName)
+        private val favoriteIcon: ImageView = itemView.findViewById(R.id.favoriteIcon) // ImageView para el icono de favoritos
 
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onMealClick(meals[position])
+                    listener.onMealClick(favoriteMeals[position])
+                }
+            }
+
+            favoriteIcon.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val favoriteMeal = favoriteMeals[position]
+                    CoroutineScope(Dispatchers.IO).launch {
+                        // Asume que tienes un método en MealRepository para verificar si una comida es favorita
+                        val isFavorite = mealRepository.isFavorite(favoriteMeal)
+                        if (isFavorite) {
+                            mealRepository.removeFavoriteMeal(favoriteMeal)
+                        } else {
+                            mealRepository.addFavoriteMeal(favoriteMeal)
+                        }
+                        // Puedes elegir actualizar la UI aquí, como cambiar el icono de favoritos
+                    }
                 }
             }
         }
 
-        fun bind(meal: Meal) {
-            textViewMealName.text = meal.strMeal
-            Picasso.get().load(meal.strMealThumb).into(imageViewMeal)
+        fun bind(favoriteMeal: FavoriteMeal) {
+            textViewMealName.text = favoriteMeal.mealName
+            Picasso.get().load(favoriteMeal.mealThumb).into(imageViewMeal)
+            // Configura el icono de favoritos según si la comida es favorita o no
         }
-
-
     }
 }

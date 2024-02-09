@@ -50,6 +50,11 @@ android {
 }
 
 dependencies {
+
+    implementation ("androidx.room:room-runtime:2.2.5")
+    implementation("androidx.games:games-activity:2.0.2")
+    annotationProcessor ("androidx.room:room-compiler:2.2.5")
+
     implementation ("androidx.constraintlayout:constraintlayout:2.2.0-alpha13")
     // To use constraintlayout in compose
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")

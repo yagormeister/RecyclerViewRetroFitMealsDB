@@ -36,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
             }
         }
 
-        // Registra el BroadcastReceiver con la seguridad requerida
+        // Registra el BroadcastReceive
         val intentFilter = IntentFilter("com.example.retromeal.DATA_LOADED")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
@@ -46,7 +46,7 @@ class SplashActivity : AppCompatActivity() {
 
         // Inicia un retraso mínimo antes de iniciar MainActivity
         Handler(Looper.getMainLooper()).postDelayed({
-            isDelayElapsed = true
+            //isDelayElapsed = true
             if (isDataLoaded) {
                 // Cierra SplashActivity
                 finish()

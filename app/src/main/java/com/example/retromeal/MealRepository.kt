@@ -48,4 +48,22 @@ class MealRepository(context: Context) {
     suspend fun removeFavoriteMeal(favoriteMeal: FavoriteMeal) = withContext(Dispatchers.IO) {
         favoriteMealDao.removeFavoriteMeal(favoriteMeal)
     }
+    suspend fun isFavorite(favoriteMeal: FavoriteMeal, userId: String): Boolean = withContext(Dispatchers.IO) {
+        val result = favoriteMealDao.findFavoriteMealByIdAndUser(favoriteMeal.idMeal, userId)
+        return@withContext result != null
+    }
+    suspend fun toggleFavoriteStatus(favoriteMeal: FavoriteMeal): Boolean = withContext(Dispatchers.IO) {
+        // Primero, verifica si la comida ya está en la lista de favoritos
+        val existingMeal = favoriteMealDao.findFavoriteMealByIdAndUser(favoriteMeal.idMeal, favoriteMeal.userId)
+
+        if (existingMeal == null) {
+            // Si la comida no está en favoritos, agrégala
+            favoriteMealDao.addFavoriteMeal(favoriteMeal)
+            true // Retorna true indicando que la comida ahora es favorita
+        } else {
+            // Si la comida ya está en favoritos, elimínala
+            favoriteMealDao.removeFavoriteMeal(favoriteMeal)
+            false // Retorna false indicando que la comida ya no es favorita
+        }
+    }
 }

@@ -19,6 +19,7 @@ class MealAdapter(private val context: Context, private val favoriteMeals: Mutab
 
     interface Listener {
         fun onMealClick(favoriteMeal: FavoriteMeal)
+        fun onFavoriteClicked(favoriteMeal: FavoriteMeal) // Asegúrate de que este método esté definido en la interfaz
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
@@ -57,8 +58,9 @@ class MealAdapter(private val context: Context, private val favoriteMeals: Mutab
                 if (position != RecyclerView.NO_POSITION) {
                     val favoriteMeal = favoriteMeals[position]
                     CoroutineScope(Dispatchers.IO).launch {
-                        // Asume que tienes un método en MealRepository para verificar si una comida es favorita
-                        val isFavorite = mealRepository.isFavorite(favoriteMeal)
+                        // Asume que has pasado userId a MealAdapter o lo tienes disponible de alguna manera
+                        val userId = "staticUserId" // Reemplaza esto por la lógica real para obtener el userId
+                        val isFavorite = mealRepository.isFavorite(favoriteMeal, userId)
                         if (isFavorite) {
                             mealRepository.removeFavoriteMeal(favoriteMeal)
                         } else {

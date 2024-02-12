@@ -14,4 +14,7 @@ interface FavoriteMealDao {
 
     @Query("SELECT * FROM favorite_meals WHERE userId = :userId")
     suspend fun getFavoriteMealsByUser(userId: String): List<FavoriteMeal>
+    @Query("SELECT * FROM favorite_meals WHERE idMeal = :idMeal AND userId = :userId LIMIT 1")
+    suspend fun findFavoriteMealByIdAndUser(idMeal: String, userId: String): FavoriteMeal?
+
 }
